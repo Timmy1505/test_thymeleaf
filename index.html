@@ -1,1 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://thymeleaf.org" class="h-100">
+  <head th:fragment="head">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
+
+    <link
+      href="//fonts.googleapis.com/css?family=Amaranth|Titillium+Web:200,200i,400,400i,600,600i,700,700i|Droid+Sans+Mono"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="d-flex flex-column h-100" th:each="info : ${settings}">
+    <header
+      th:replace="~{landing_page/fragments/gen_header :: header}"
+    ></header>
+    <main role="main">
+      <div id="page-wrapper">
+        <div class="container">
+          <div class="row py-4">
+            <div class="col-lg-2 d-none d-lg-inline-block">
+              <div class="categories affix-categories">
+                <ul class="nav flex-column nav-categories">
+                  <li class="nav-item">
+                    <a
+                      th:href="@{#}"
+                      th:attr="data-category-id=0"
+                      class="nav-link fw-bold active"
+                      id="all-categories-button"
+                      >All Categories</a
+                    >
+                  </li>
+
+                  <li
+                    class="nav-item"
+                    th:each="available_categories : ${category}"
+                  >
+                    <a
+                      th:href="@{#}"
+                      class="nav-link"
+                      th:text="${available_categories.name}"
+                      th:attr="data-category-id=${available_categories.id}"
+                      >Appetizer</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="content">
+                <div id="local-box">
+                  <div class="panel local-search">
+                    <div class="panel-body">
+                      <div id="local-search-container">
+                        <div id="local-search-form" class=""></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-local">
+                    <div class="panel-body">
+                      <div class="row boxes">
+                        <div class="box-one col-sm-6">
+                          <dl class="no-spacing">
+                            <dd>
+                              <h1 class="h3" th:text="${info.name}">
+                                Chez Ntemba
+                              </h1>
+                            </dd>
+                            <dd class="text-muted"></dd>
+                            <dd>
+                              <span
+                                class="text-muted"
+                                th:text="${info.location}"
+                                >Lusaka, Zambia
+                              </span>
+                            </dd>
+                          </dl>
+                        </div>
+                        <div class="box-divider d-block d-sm-none"></div>
+                        <div id="local-box-two" class="box-two col-sm-6">
+                          <dl class="no-spacing">
+                            <dt>
+                              <span
+                                th:text="${info.isOpen ? 'We are open' : 'We are closed'}"
+                                th:class="${info.isOpen ? 'text-success' : 'text-danger'}"
+                              ></span>
+                            </dt>
+
+                            <dd>
+                              <span class="fa fa-clock"></span>&nbsp;&nbsp;
+                              <span
+                                th:text="${info.openTime} +'-'+ ${info.closeTime} "
+                                >24 hours, 7 days.</span
+                              >
+                            </dd>
+
+                            <dd class="text-muted"></dd>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <div class="bg-white border-bottom px-3 d-block d-lg-none">
+                    <div class="layout-scrollable w-100">
+                      <ul
+                        class="nav nav-categories nav-inline flex-nowrap py-2 w-100"
+                      >
+                        <li class="nav-item">
+                          <a
+                            th:attr="data-category-id=0"
+                            class="nav-link text-nowrap fw-bold active"
+                            id="all-categories-button"
+                            data-id="all-categories"
+                            >All Categories</a
+                          >
+                        </li>
+                        <li
+                          class="nav-item"
+                          th:each="available_categories : ${category}"
+                        >
+                          <a
+                            href="#"
+                            class="nav-link category-link"
+                            data-category-id="${available_categories.id}"
+                            th:text="${available_categories.name}"
+                            th:attr="data-category-id=${available_categories.id}"
+                            >Appetizer</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="menu-search">
+                    <div class="py-3 px-4 border-top border-bottom">
+                      <form id="menu-search" method="GET" role="form">
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fa fa-search"></i
+                          ></span>
+                          <input
+                            type="search"
+                            class="form-control"
+                            name="q"
+                            placeholder="Search menu items."
+                            value=""
+                            autocomplete="off"
+                          />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="menu-list">
+                    <div class="menu-group">
+                      <div class="menu-group-item">
+                        <div id="product-list" class="menu-items">
+                          <div
+                            class="menu-item"
+                            th:each="available_products : ${products}"
+                          >
+                            <div class="d-flex flex-row parent_element">
+                              <div class="menu-content flex-grow-1 me-3">
+                                <h6
+                                  class="menu-name"
+                                  th:text="${available_products.name}"
+                                >
+                                  Puff-Puff
+                                </h6>
+                              </div>
+                              <div
+                                class="menu-detail d-flex justify-content-end col-3 p-0"
+                              >
+                                <div class="menu-price pe-3">
+                                  <b
+                                    th:text="${#numbers.formatDecimal(available_products.price, 0, 'COMMA', 2, 'POINT')}"
+                                    >K4.99</b
+                                  >
+                                </div>
+                                <!-- attention needed apa so -->
+
+                                <div class="menu-button">
+                                  <button
+                                    th:id="'item-' + ${available_products.id}"
+                                    th:attr="data-toggle='modal'"
+                                    class="btn btn-light btn-sm"
+                                    onclick="showModal(this)"
+                                  >
+                                    <i class="fa fa-plus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="pagination-bar text-right">
+                      <div class="links"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 de">
+              <form
+                id="desktopOrderForm"
+                action="/api/desktop-order"
+                th:action="@{/api/desktop-order}"
+                class="affix-cart d-none d-lg-block"
+                method="post"
+              >
+                <div>
+                  <div class="">
+                    <div class="panel panel-cart">
+                      <div class="panel-body">
+                        <div class="local-timeslot">
+                          <div class="dropdown">
+                            <p class="btn btn-light btn-block text-truncate">
+                              <b> Order Summary </b>
+                            </p>
+                          </div>
+                        </div>
+                        <div>
+                          <div id="cart-box" class="module-box">
+                            <div id="desktop-cart-items">
+                              <div class="desktop-cart-items">
+                                <ul
+                                  class="desktop-itemsAppend"
+                                  id="desktopCartContainer"
+                                ></ul>
+                              </div>
+                            </div>
+
+                            <div id="cart-totals">
+                              <div class="cart-total">
+                                <div class="table-responsive">
+                                  <table class="table table-none">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <span class="text-muted">
+                                            Order Total:
+                                          </span>
+                                        </td>
+                                        <td class="text-right">K0.00</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="cart-coupon">
+                              <!-- add to check if unauth -->
+                              <div th:if="${not #authentication.principal}">
+                                <div class="input-group">
+                                  <input
+                                    required
+                                    type="text"
+                                    name="customerName"
+                                    class="form-control"
+                                    placeholder="Enter your name"
+                                  />
+                                </div>
+                                <div class="input-group pt">
+                                  <input
+                                    required
+                                    type="number"
+                                    name="customerPhoneNumber"
+                                    class="form-control"
+                                    placeholder="Enter phone number"
+                                  />
+                                </div>
+                              </div>
+                              <div class="input-group pt">
+                                <input
+                                  required
+                                  type="text"
+                                  name="tableNumber"
+                                  class="form-control"
+                                  placeholder="Enter table Number"
+                                />
+                              </div>
+
+                              <div class="input-group pt">
+                                <select
+                                  required
+                                  class="form-control"
+                                  name="paymetMethod"
+                                >
+                                  <option disabled selected>
+                                    select category
+                                  </option>
+                                  <option
+                                    th:each="typeOpt : ${T(zm.tcmnt.WhatsAppOrder.enums.PaymentMethod).values()}"
+                                    th:value="${typeOpt}"
+                                    th:text="${typeOpt.displayValue}"
+                                  ></option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div id="cart-buttons" class="mt-3">
+                              <button
+                                type="submit"
+                                class="checkout-btn btn btn-primary btn-block btn-lg"
+                              >
+                                Checkout · K0.00
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- paste code for my order  -->
+            <div
+              id="cart-mobile-buttons"
+              class="fixed-bottom d-block d-lg-none"
+            >
+              <button
+                onclick="showCart(this)"
+                class="btn btn-primary btn-block btn-lg radius-none cart-toggle text-nowrap"
+              >
+                View Order
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="cart-box-modal"
+      class="modal"
+      aria-labelledby="itemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 id="item-name" class="modal-title">Product Name</h4>
+            <button
+              type="button"
+              id="btn-close"
+              class="btn-close px-2"
+              onclick="closeModal()"
+            ></button>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row g-0 w-100">
+              <div class="col-sm-5 pb-3 pb-sm-0">
+                <div class="input-group input-group-lg" data-toggle="quantity">
+                  <button
+                    class="btn btn-light minus_"
+                    data-operator="minus"
+                    type="button"
+                  >
+                    <i class="fa fa-minus"></i>
+                  </button>
+                  <input
+                    type="number"
+                    name="quantity"
+                    class="form-control text-center"
+                    id="quantity"
+                    value="1"
+                    min="1"
+                    autocomplete="off"
+                  />
+                  <button
+                    class="btn btn-light plus_"
+                    data-operator="plus"
+                    type="button"
+                  >
+                    <i class="fa fa-plus fa-fw"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-7 ps-sm-3">
+                <button
+                  class="btn btn-primary btn-lg text-white w-100 btn-cart"
+                >
+                  <div class="d-flex align-items-center">
+                    <div class="col"></div>
+                    <div class="col text-nowrap">Add to order</div>
+                    <div
+                      class="col text-end fw-normal fs-6 fade"
+                      id="price_"
+                    ></div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="cart-modal"
+      class="modal"
+      aria-labelledby="itemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="mobileOrderForm"
+            action="/api/placeOrder"
+            th:action="@{/api/placeOrder}"
+            method="post"
+            class="col-lg-4"
+          >
+            <div>
+              <div class="">
+                <div class="panel panel-cart">
+                  <div class="panel-body">
+                    <div class="local-timeslot">
+                      <div class="dropdown">
+                        <p class="btn btn-light btn-block text-truncate">
+                          <b> Order Summary </b>
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div id="cart-box" class="module-box">
+                        <div id="cart-items">
+                          <div class="cart-items">
+                            <ul class="itemsAppend" id="cartContainer"></ul>
+                          </div>
+                        </div>
+
+                        <div id="cart-totals">
+                          <div class="cart-total">
+                            <div class="table-responsive">
+                              <table class="table table-none">
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      <span class="text-muted">
+                                        Order Total:
+                                      </span>
+                                    </td>
+                                    <td class="text-right">K0.00</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="cart-coupon">
+                          <!-- add to check if unauth -->
+                          <div th:if="${not #authentication.principal}">
+                            <div class="input-group">
+                              <input
+                                required
+                                type="text"
+                                name="customerName"
+                                class="form-control"
+                                placeholder="Enter your name"
+                              />
+                            </div>
+                            <div class="input-group pt">
+                              <input
+                                required
+                                type="number"
+                                name="customerPhoneNumber"
+                                class="form-control"
+                                placeholder="Enter phone number"
+                              />
+                            </div>
+                          </div>
+                          <div class="input-group pt">
+                            <input
+                              required
+                              type="text"
+                              name="tableNumber"
+                              class="form-control"
+                              placeholder="Enter table Number"
+                            />
+                          </div>
+
+                          <div class="input-group pt">
+                            <select
+                              required
+                              class="dropdown-item"
+                              name="paymetMethod"
+                            >
+                              <option disabled selected>select category</option>
+                              <option
+                                th:each="typeOpt : ${T(zm.tcmnt.WhatsAppOrder.enums.PaymentMethod).values()}"
+                                th:value="${typeOpt}"
+                                th:text="${typeOpt.displayValue}"
+                              ></option>
+                            </select>
+                          </div>
+                        </div>
+                        <div id="cart-buttons" class="mt-3">
+                          <button
+                            type="submit"
+                            class="checkout-btn btn btn-primary btn-block btn-lg input-name-1"
+                          >
+                            Checkout · K0.00
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/index-2.js}"></script>
+  </body>
+</html>
 
